@@ -4,6 +4,7 @@ using System.Collections;
 public class BirdDragController : MonoBehaviour {
 
 	public GUIText status;
+	public GameObject dot;
 	private Vector3 startPos;
 	private float totalXMoved;
 	private float totalYMoved;
@@ -50,6 +51,9 @@ public class BirdDragController : MonoBehaviour {
 						//Vector3 bpos = new Vector3(1,0,0);
 						Vector3 bpos = new Vector3(xMoved,yMoved,0);
 						transform.Translate(bpos);
+						
+						Vector3 dpos = new Vector3(-totalXMoved,-totalYMoved,0.0f);
+						dot.transform.position = dpos;
 					}
 					else
 					{
