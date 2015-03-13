@@ -4,11 +4,22 @@ using System.Collections;
 public class BirdDragController : MonoBehaviour {
 
 	public GUIText status;
+	private Vector3 startPos;
+	private float totalXMoved;
+	private float totalYMoved;
+	private float totalMovedDistance;
+	
 	// Use this for initialization
 	void Start () {
 	 status.text="not touched";
+	 startPos = transform.position;
 	}
-	
+	void resetPos()
+	{
+		transform.position = startPos;
+		totalXMoved=0.0f;
+		totalYMoved=0.0f;
+	}
 	// Update is called once per frame
 	void Update () 
 	{
@@ -21,17 +32,42 @@ public class BirdDragController : MonoBehaviour {
 			{
 			//	Debug.Log ("I'm hitting "+hit.collider.name);
 				//status.text = "hit on"+hit.transform.gameObject.name;
-				status.text= "touch delta"+Input.GetTouch(0).deltaPosition;
+				//status.text= "touch delta"+Input.GetTouch(0).deltaPosition;
 				if(hit.transform.gameObject.name=="bird")
 				{
-					status.text = "Touched at"+Input.GetTouch(0).position;
-					//Vector3 bpos = new Vector3(1,0,0);
-					Vector3 bpos = new Vector3(Input.GetTouch(0).deltaPosition.x*0.1f,Input.GetTouch(0).deltaPosition.y*0.1f,0);
-					transform.Translate(bpos);
+					
+					
+					float xMoved = Input.GetTouch(0).deltaPosition.x * 0.1f;
+					float yMoved = Input.GetTouch(0).deltaPosition.y * 0.1f;
+					totalXMoved += xMoved;
+					totalYMoved += yMoved;
+					
+					totalMovedDistance = Mathf.Sqrt(totalXMoved*totalXMoved+totalYMoved*totalYMoved);
+					
+					if(totalMovedDistance < 3.0f)
+					{
+						status.text = "Total moved distance="+totalMovedDistance;
+						//Vector3 bpos = new Vector3(1,0,0);
+						Vector3 bpos = new Vector3(xMoved,yMoved,0);
+						transform.Translate(bpos);
+					}
+					else
+					{
+						resetPos();
+						
+					}
 					
 				}
-				}
+			}
 			
+			
+		}
+		else
+		{
+			if(Input.touchCount==0)
+			{
+				resetPos();
+			}
 		}
 		
 	}
