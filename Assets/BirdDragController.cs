@@ -9,7 +9,7 @@ public class BirdDragController : MonoBehaviour {
 	private float totalXMoved;
 	private float totalYMoved;
 	private float totalMovedDistance;
-	
+	private bool dragFinished=false;
 	// Use this for initialization
 	void Start () {
 	 status.text="not touched";
@@ -24,6 +24,8 @@ public class BirdDragController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+	
+		GameUpdate();
 	
 		if(Input.touchCount == 1 && Input.GetTouch(0).phase== TouchPhase.Moved)
 		{
@@ -52,8 +54,9 @@ public class BirdDragController : MonoBehaviour {
 						Vector3 bpos = new Vector3(xMoved,yMoved,0);
 						transform.Translate(bpos);
 						
-						Vector3 dpos = new Vector3(-totalXMoved,-totalYMoved,0.0f);
-						dot.transform.position = dpos;
+						//Vector3 dpos = new Vector3(-totalXMoved,-totalYMoved,0.0f);
+						//dot.transform.position = dpos;
+						
 					}
 					else
 					{
@@ -68,11 +71,31 @@ public class BirdDragController : MonoBehaviour {
 		}
 		else
 		{
-			if(Input.touchCount==0)
+			for(int i =0; i < Input.touchCount;i++)
 			{
-				resetPos();
+				Touch touch = Input.GetTouch(i);
+				
+				
+					if(touch.phase == TouchPhase.Ended)
+					{
+						dragFinished=true;
+						status.text = "drag finished,touch lifteed";			
+					}
+				
 			}
+			
 		}
 		
+	}
+	void GameUpdate()
+	{
+		if(dragFinished)
+		{
+			
+			Vector2 moveVector = new Vector2(5,10);
+			//moveVector.Normalize();
+		//	moveVector = new Vector2(moveVector.x *5 , moveVector.y*5 );
+			rigidbody2D.AddForce(moveVector);
+		}
 	}
 }
