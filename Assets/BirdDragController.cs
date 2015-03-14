@@ -39,7 +39,8 @@ public class BirdDragController : MonoBehaviour {
 				if(hit.transform.gameObject.name=="bird")
 				{
 					
-					
+					dragFinished = true;
+					/*
 					float xMoved = Input.GetTouch(0).deltaPosition.x * 0.1f;
 					float yMoved = Input.GetTouch(0).deltaPosition.y * 0.1f;
 					totalXMoved += xMoved;
@@ -63,6 +64,7 @@ public class BirdDragController : MonoBehaviour {
 						resetPos();
 						
 					}
+					*/
 					
 				}
 			}
@@ -78,7 +80,7 @@ public class BirdDragController : MonoBehaviour {
 				
 					if(touch.phase == TouchPhase.Ended)
 					{
-						dragFinished=true;
+					//	dragFinished=true;
 						status.text = "drag finished,touch lifteed";			
 					}
 				
@@ -91,11 +93,12 @@ public class BirdDragController : MonoBehaviour {
 	{
 		if(dragFinished)
 		{
-			
-			Vector2 moveVector = new Vector2(5,10);
+			status.text="touched bird";
+			Vector2 moveVector = new Vector2(150,100);
 			//moveVector.Normalize();
 		//	moveVector = new Vector2(moveVector.x *5 , moveVector.y*5 );
 			rigidbody2D.AddForce(moveVector);
+			dragFinished = false;
 		}
 	}
 }
